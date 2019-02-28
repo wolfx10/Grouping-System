@@ -1,0 +1,99 @@
+﻿@model GroupingSystem.Models.Group
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Group</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.groupName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.groupName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.groupSize)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.groupSize)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.groupOwner)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.groupOwner)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.member1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.member1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.member2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.member2)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.member3)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.member3)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.member4)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.member4)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.accepted)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.accepted)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.groupDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.groupDescription)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.groupEvent)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.groupEvent)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
