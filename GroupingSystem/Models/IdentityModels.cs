@@ -31,5 +31,7 @@ namespace GroupingSystem.Models
         }
 
         public System.Data.Entity.DbSet<GroupingSystem.Models.Group> Groups { get; set; }
+
+        public System.Data.Entity.DbSet<GroupingSystem.Models.Event> Events { get; set; }
     }
 }
