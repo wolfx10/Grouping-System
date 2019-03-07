@@ -51,7 +51,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.groupEvent, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.groupEvent, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.DropDownListFor(model => model.groupEvent, ViewBag.Events as SelectList, "--Select Event--")
             @Html.ValidationMessageFor(model => model.groupEvent, "", new { @class = "text-danger" })
         </div>
     </div>

@@ -16,21 +16,6 @@ namespace GroupingSystem.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Group>()
-                .Property(e => e.member1)
-                .IsFixedLength();
-
-            modelBuilder.Entity<Group>()
-                .Property(e => e.member2)
-                .IsFixedLength();
-
-            modelBuilder.Entity<Group>()
-                .Property(e => e.member3)
-                .IsFixedLength();
-
-            modelBuilder.Entity<Group>()
-                .Property(e => e.member4)
-                .IsFixedLength();
         }
     }
 }

@@ -47,7 +47,7 @@ namespace GroupingSystem.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Name,Location,Tickets_available")] Event @event)
+        public async Task<ActionResult> Create([Bind(Include = "Name,Location,Tickets_available")] Event @event)
         {
             if (ModelState.IsValid)
             {

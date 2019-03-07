@@ -8,7 +8,6 @@ namespace GroupingSystem.Models
 
     public partial class Group
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
         [Required]
@@ -21,16 +20,16 @@ namespace GroupingSystem.Models
         [StringLength(50)]
         public string groupOwner { get; set; }
 
-        [StringLength(10)]
+        [StringLength(50)]
         public string member1 { get; set; }
 
-        [StringLength(10)]
+        [StringLength(50)]
         public string member2 { get; set; }
 
-        [StringLength(10)]
+        [StringLength(50)]
         public string member3 { get; set; }
 
-        [StringLength(10)]
+        [StringLength(50)]
         public string member4 { get; set; }
 
         public bool? accepted { get; set; }

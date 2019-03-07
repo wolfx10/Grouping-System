@@ -8,7 +8,6 @@ namespace GroupingSystem.Models
 
     public partial class Event
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
         [Required]
