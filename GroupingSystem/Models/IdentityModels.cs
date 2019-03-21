@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -9,6 +10,15 @@ namespace GroupingSystem.Models
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit https://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser
     {
+        [Display(Name ="First Name"), Required]
+        public string FirstName { get; set; }
+
+        [Display(Name = "Last Name"), Required]
+        public string LastName { get; set; }
+
+        [Display(Name = "Date of birth"), Required]
+        public string DoB { get; set; }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
@@ -33,5 +43,9 @@ namespace GroupingSystem.Models
         public System.Data.Entity.DbSet<GroupingSystem.Models.Group> Groups { get; set; }
 
         public System.Data.Entity.DbSet<GroupingSystem.Models.Event> Events { get; set; }
+
+        public System.Data.Entity.DbSet<GroupingSystem.Models.SubmittedGroup> SubmittedGroups { get; set; }
+
+        public System.Data.Entity.DbSet<GroupingSystem.Models.UserProfile> UserProfiles { get; set; }
     }
 }

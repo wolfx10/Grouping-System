@@ -75,6 +75,7 @@ namespace GroupingSystem.Controllers
             return View(model);
         }
 
+
         //
         // POST: /Manage/RemoveLogin
         [HttpPost]

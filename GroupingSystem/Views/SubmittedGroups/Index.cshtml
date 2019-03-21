@@ -1,0 +1,59 @@
+﻿@model IEnumerable<GroupingSystem.Models.SubmittedGroup>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.GroupID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.groupOwner)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.groupEvent)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Approved)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Denied)
+        </th>
+
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.GroupID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.groupOwner)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.groupEvent)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Approved)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Denied)
+        </td>
+
+        <td>
+            @Html.ActionLink("Approve", "Approve", new { id = item.Id }) |
+            @Html.ActionLink("Deny", "Deny", new { id = item.Id })
+        </td>
+    </tr>
+}
+
+</table>

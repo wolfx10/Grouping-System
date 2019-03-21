@@ -40,9 +40,56 @@ namespace GroupingSystem.Controllers
         // GET: Groups/Create
         public ActionResult Create()
         {
-            ViewBag.Events = new SelectList(db.Events, "Name", "Name");
+            ViewBag.Events = new SelectList(db.Events, "Name", "eventAndTickets" );
             return View();
         }
+
+
+
+        // GET: Groups/SubmitGroup
+        public async Task<ActionResult> SubmitGroup(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Group group = await db.Groups.FindAsync(id);
+            if (group == null)
+            {
+                return HttpNotFound();
+            }
+            return View(group);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> SubmitGroup([Bind(Include = "Id,groupName,groupSize,groupOwner,member1,member2,member3,member4,submitted,groupDescription,groupEvent")]  Group group)
+        {
+
+            var submitted = new SubmittedGroup
+            {
+                GroupID = group.Id,
+                groupOwner = group.groupOwner,
+                groupEvent = group.groupEvent
+            };
+
+
+            db.SubmittedGroups.Add(submitted);
+
+            if (ModelState.IsValid)
+            {
+                group.submitted = true;
+                db.Entry(group).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            return View(group);
+        }
+
+
+
+
+
 
 
         // POST: Groups/Create
@@ -50,13 +97,40 @@ namespace GroupingSystem.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "groupName,groupSize,groupOwner,groupEvent")] Group group)
+        public async Task<ActionResult> Create([Bind(Include = "groupName,groupDescription,groupSize,groupOwner,groupEvent")] Group group)
         {
+            Event eventChecked = new Event();
+            ViewBag.Events = new SelectList(db.Events, "Name", "eventAndTickets");
+
             if (ModelState.IsValid)
             {
-                db.Groups.Add(group);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                foreach (Event dbEvent in db.Events)
+                {
+                    if (group.groupEvent == dbEvent.Name)
+                    {
+                        eventChecked = dbEvent;
+                        break;
+                    }
+
+                }
+
+                if(group.groupSize > eventChecked.Tickets_available)
+                {
+                    ModelState.AddModelError("groupSize", "There are not enough tickets for  group this size.");
+                    return View(group);
+                }
+
+                if (group.groupSize < 0)
+                {
+                    ModelState.AddModelError("groupSize", "Can't have a negative group size.");
+                    return View(group);
+                }
+
+                    group.groupOwner = User.Identity.Name;
+                    db.Groups.Add(group);
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+
             }
 
             return View(group);
@@ -75,36 +149,72 @@ namespace GroupingSystem.Controllers
             {
                 return HttpNotFound();
             }
+            int memberCount = 0;
+
+            if (group.member1 != null)
+            {
+                memberCount = 2;
+            }
+
+            if (group.member2 != null)
+            {
+                memberCount = 3;
+            }
+
+            if (group.member3 != null)
+            {
+                memberCount = 4;
+            }
+
+            if (group.member4 != null)
+            {
+                memberCount = 5;
+            }
+
+            ViewBag.memberCount = memberCount;
             return View(group);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Join([Bind(Include = "Id,groupName,groupSize,groupOwner,member1,member2,member3,member4,accepted,groupDescription,groupEvent")] Group group)
+        public async Task<ActionResult> Join([Bind(Include = "Id,groupName,groupSize,groupOwner,member1,member2,member3,member4,submitted,groupDescription,groupEvent")] Group group)
         {
 
                 if (ModelState.IsValid){
 
-                if (group.member1 != null)
+                if (group.member1 == null)
                 {
-                    if (group.member2 != null)
-                    {
-                        if (group.member3 == null)
-                        
-                            else if (group.member4 == null)
-                            {
-
-                            }
-                        }
-                    }
-                        group.member1 = User.Identity.Name;
+                    group.member1 = User.Identity.Name;
+                    db.Entry(group).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
                 }
 
+                if (group.member2 == null)
+                {
+                    group.member2 = User.Identity.Name;
+                    db.Entry(group).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
 
-                db.Entry(group).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                if (group.member3 == null)
+                {
+                    group.member3 = User.Identity.Name;
+                    db.Entry(group).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+
+                if (group.member4 == null)
+                {
+                    group.member4 = User.Identity.Name;
+                    db.Entry(group).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+
             }
             return View(group);
         }
@@ -137,7 +247,7 @@ namespace GroupingSystem.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,groupName,groupSize,groupOwner,member1,member2,member3,member4,accepted,groupDescription,groupEvent")] Group group)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,groupName,groupSize,groupOwner,member1,member2,member3,member4,submitted,groupDescription,groupEvent")] Group group)
         {
             if (ModelState.IsValid)
             {

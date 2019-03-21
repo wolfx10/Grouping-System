@@ -16,7 +16,6 @@ namespace GroupingSystem.Models
 
         public int groupSize { get; set; }
 
-        [Required]
         [StringLength(50)]
         public string groupOwner { get; set; }
 
@@ -32,11 +31,12 @@ namespace GroupingSystem.Models
         [StringLength(50)]
         public string member4 { get; set; }
 
-        public bool? accepted { get; set; }
+        public bool submitted { get; set; }
 
         public string groupDescription { get; set; }
 
         [StringLength(50)]
         public string groupEvent { get; set; }
+
     }
 }

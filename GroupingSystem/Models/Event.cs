@@ -8,6 +8,8 @@ namespace GroupingSystem.Models
 
     public partial class Event
     {
+
+
         public int Id { get; set; }
 
         [Required]
@@ -20,5 +22,7 @@ namespace GroupingSystem.Models
 
         [Column("Tickets available")]
         public int Tickets_available { get; set; }
+
+        public string eventAndTickets { get { return "Event: " + " " + Name + " | Tickets Available: " + Tickets_available; } }
     }
 }

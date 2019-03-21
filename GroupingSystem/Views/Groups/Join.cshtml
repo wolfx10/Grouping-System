@@ -10,9 +10,10 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
 <div class="form-horizontal">
     <h4>Group</h4>
+    @ViewBag.memberCount
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     @Html.HiddenFor(model => model.Id)
@@ -20,7 +21,8 @@
     <div class="form-group">
         @Html.LabelFor(model => model.groupName, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.groupName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.HiddenFor(model => model.groupName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.DisplayFor(model => model.groupName, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.groupName, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -28,7 +30,8 @@
     <div class="form-group">
         @Html.LabelFor(model => model.groupDescription, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.groupDescription, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.HiddenFor(model => model.groupDescription, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.DisplayFor(model => model.groupDescription, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.groupDescription, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -36,7 +39,8 @@
     <div class="form-group">
         @Html.LabelFor(model => model.groupEvent, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.groupEvent, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.HiddenFor(model => model.groupEvent, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.DisplayFor(model => model.groupEvent, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.groupEvent, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -44,19 +48,34 @@
     <div class="form-group">
         @Html.LabelFor(model => model.groupOwner, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.groupOwner, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.HiddenFor(model => model.groupOwner, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.DisplayFor(model => model.groupOwner, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.groupOwner, "", new { @class = "text-danger" })
         </div>
     </div>
 
+    <div class="form-group">
+        <div class="col-md-10">
+            @Html.HiddenFor(model => model.groupSize, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.groupOwner, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+
     @if (Model.member1 == null)
     {
         <div class="form-group">
-            @Html.LabelFor(model => model.member1, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.member1, new { @Value = "0" })
-                @Html.ValidationMessageFor(model => model.member1, "", new { @class = "text-danger" })
-            </div>
+            @if (Model.groupSize >= 2)
+
+            {
+                @Html.LabelFor(model => model.member1, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.member1, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.member1, "", new { @class = "text-danger" })
+                </div>
+            }
+
         </div>
     }
     else
@@ -64,20 +83,28 @@
         <div class="form-group">
             @Html.LabelFor(model => model.member1, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
+                @Html.HiddenFor(model => model.member1, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.DisplayFor(model => model.member1, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.member1, "", new { @class = "text-danger" })
             </div>
         </div>
     }
 
+
+
+
+
     @if (Model.member2 == null)
     {
         <div class="form-group">
-            @Html.LabelFor(model => model.member2, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.member2, new { @Value = "0" })
-                @Html.ValidationMessageFor(model => model.member2, "", new { @class = "text-danger" })
-            </div>
+            @if (Model.groupSize >= 3)
+            {
+                @Html.LabelFor(model => model.member2, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.member2, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.member2, "", new { @class = "text-danger" })
+                </div>
+            }
         </div>
     }
     else
@@ -85,6 +112,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.member2, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
+                @Html.HiddenFor(model => model.member2, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.DisplayFor(model => model.member2, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.member2, "", new { @class = "text-danger" })
             </div>
@@ -94,11 +122,14 @@
     @if (Model.member3 == null)
     {
         <div class="form-group">
-            @Html.LabelFor(model => model.member3, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.member3, new { @Value = "0" })
-                @Html.ValidationMessageFor(model => model.member3, "", new { @class = "text-danger" })
-            </div>
+            @if (Model.groupSize >= 4)
+            {
+                @Html.LabelFor(model => model.member3, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.member3, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.member3, "", new { @class = "text-danger" })
+                </div>
+            }
         </div>
     }
     else
@@ -106,6 +137,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.member3, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
+                @Html.HiddenFor(model => model.member3, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.DisplayFor(model => model.member3, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.member3, "", new { @class = "text-danger" })
             </div>
@@ -115,11 +147,14 @@
     @if (Model.member4 == null)
     {
         <div class="form-group">
-            @Html.LabelFor(model => model.member4, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.member4, new { @Value = "0" })
-                @Html.ValidationMessageFor(model => model.member4, "", new { @class = "text-danger" })
-            </div>
+            @if (Model.groupSize >= 5)
+            {
+                @Html.LabelFor(model => model.member4, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.member4, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.member4, "", new { @class = "text-danger" })
+                </div>
+            }
         </div>
     }
     else
@@ -127,6 +162,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.member4, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
+                @Html.HiddenFor(model => model.member4, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.DisplayFor(model => model.member4, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.member4, "", new { @class = "text-danger" })
             </div>
@@ -134,12 +170,19 @@
     }
 
 
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Save" class="btn btn-default" />
+    @if (ViewBag.memberCount == Model.groupSize)
+    {
+        <p>Group is full</p>
+    }
+    else
+    {
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
         </div>
-    </div>
+    }
+
 </div>
 }
 
