@@ -1,30 +1,32 @@
 ﻿@model IEnumerable<GroupingSystem.Models.Event>
-
+<link href="~/Content/Site.css" rel="stylesheet" />
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<li>@Html.ActionLink("Create New Event", "Create", "Events")</li>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
+@if (User.IsInRole("Admin"))
+{
+    @Html.ActionLink("Create New Event", "Create", "Events", null, new { @class = "btn btn-primary btn-large" })
+}
+<table class="table table-condensed groupTable">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            Event
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Location)
+            @Html.DisplayNameFor(model => model.Location)           
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Tickets_available)
+            @Html.DisplayNameFor(model => model.Date) and time
         </th>
-        <th></th>
+        <th>
+            Available Tickets
+        </th>
     </tr>
 
-@foreach (var item in Model) {
+    @foreach (var item in Model)
+    {
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Name)
@@ -33,14 +35,24 @@
             @Html.DisplayFor(modelItem => item.Location)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => item.Date) @Html.DisplayFor(modelItem => item.Time)
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.Tickets_available)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @Html.ActionLink("Make group", "CreateFromEvent", "Groups", new { id = item.Id }, null)
         </td>
+        @if (User.IsInRole("Admin"))
+        {
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        }
+
     </tr>
-}
+    }
 
 </table>

@@ -14,6 +14,7 @@ namespace GroupingSystem.Models
         [StringLength(50)]
         public string groupName { get; set; }
 
+        [Range(2, 5, ErrorMessage = "Value must be between 2 to 5")]
         public int groupSize { get; set; }
 
         [StringLength(50)]
@@ -37,6 +38,8 @@ namespace GroupingSystem.Models
 
         [StringLength(50)]
         public string groupEvent { get; set; }
+
+        public int eventId { get; set; }
 
     }
 }

@@ -1,0 +1,81 @@
+﻿@model GroupingSystem.Models.UserProfile
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+<div class="row">
+    <div class="col-md-4">
+        <section id="profileDetails">
+            <dl class="dl-horizontal">
+                <dt>
+                    Username:
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.username)
+                </dd>
+                <dt>
+                    Name:
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.firstName) @Html.DisplayFor(model => model.lastName)
+                </dd>
+                <dt>
+                    Date of Birth:
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.DoB)
+                </dd>
+                @if (Model.username != User.Identity.Name)
+                {
+                    <dd>
+                        @Html.ActionLink("Message user", "Create", "Messages", new { user = Model.username }, null)
+                    </dd>
+                }
+
+            </dl>
+        </section>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        Attended events
+        <section id="eventShowcase">
+            @foreach(var g in ViewBag.groupsAttended)
+            {
+                <div>
+                    @g.groupName
+                    @g.groupEvent                   
+                </div>
+            }
+        </section>
+    </div>
+    <div class="col-md-6">
+        <section id="eventBadges">
+            badges
+            <div>
+            @if (ViewBag.eventsAttended >= 1)
+            {
+            
+                <img src="@Url.Content("~/Content/badges/1OrMore.jpg")" />
+            
+            }
+            @if (ViewBag.eventsAttended >= 3)
+            {
+            
+                <img src="@Url.Content("~/Content/badges/3OrMore.jpg")" />
+            
+            }
+            @if (ViewBag.eventsAttended >= 5)
+            {
+            
+                <img src="@Url.Content("~/Content/badges/5OrMore.jpg")" />
+            
+            }
+            </div>
+        </section>
+    </div>
+</div>

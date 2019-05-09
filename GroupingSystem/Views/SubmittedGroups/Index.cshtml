@@ -5,12 +5,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
+<h2>Submitted groups</h2>
+@using (Html.BeginForm("Index", "SubmittedGroups", FormMethod.Get))
+{
+    <span>Filter out approved/denied groups: </span>@Html.CheckBox("filterOut", false);<span>  </span><br />
+    <input type="submit" value="Apply" /> @Html.ActionLink("Reset filter", "Index", "SubmittedGroups", null, new { @class = "btn btn-primary btn-large" }) <div style=" margin-bottom: 5px;">
+    </div><br />
+}
+<table class="table table-condensed groupTable">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.GroupID)
@@ -31,29 +33,33 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.GroupID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.groupOwner)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.groupEvent)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Approved)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Denied)
-        </td>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.GroupID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.groupOwner)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.groupEvent)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Approved)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Denied)
+            </td>
 
-        <td>
-            @Html.ActionLink("Approve", "Approve", new { id = item.Id }) |
-            @Html.ActionLink("Deny", "Deny", new { id = item.Id })
-        </td>
-    </tr>
-}
+            <td>
+                @if (item.Approved == false && item.Denied == false)
+                {
+                    @Html.ActionLink("Approve", "Approve", new { id = item.Id })<span> | </span>
+                    @Html.ActionLink("Deny", "Deny", new { id = item.Id })
+                }
+            </td>
+        </tr>
+    }
 
 </table>

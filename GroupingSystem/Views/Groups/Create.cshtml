@@ -5,27 +5,26 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Create</h2>
+<h2>Create a group</h2>
 
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
     
 <div class="form-horizontal">
-    <h4>Group</h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
     <div class="form-group">
-        @Html.LabelFor(model => model.groupName, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.groupName,"Group Name", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.groupName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.EditorFor(model => model.groupName, new { htmlAttributes = new { @class = "form-control", @maxlength = "50" } })
             @Html.ValidationMessageFor(model => model.groupName, "", new { @class = "text-danger" })
         </div>
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.groupEvent, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.groupEvent, "Event", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.DropDownListFor(model => model.groupEvent, ViewBag.Events as SelectList, "--Select Event--")
             @Html.ValidationMessageFor(model => model.groupEvent, "", new { @class = "text-danger" })
@@ -34,15 +33,15 @@
 
 
     <div class="form-group">
-        @Html.LabelFor(model => model.groupDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.groupDescription, "Description", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.groupDescription, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.EditorFor(model => model.groupDescription, new { htmlAttributes = new { @class = "form-control", @maxlength = "75" } })
             @Html.ValidationMessageFor(model => model.groupDescription, "", new { @class = "text-danger" })
         </div>
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.groupSize, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.groupSize, "Group Size", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.EditorFor(model => model.groupSize, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.groupSize, "",  new { @class = "text-danger" })
@@ -52,12 +51,12 @@
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
+            <input type="submit" value="Create" class="btn btn-default" />  @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary btn-large" })
         </div>
     </div>
 </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+
+
+

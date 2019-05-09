@@ -22,3 +22,59 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.forumTable {
+    border-radius: 20px;
+    border-spacing: 0 10px;
+    font-family: 'Adobe Gothic Std';
+    font-size: large;
+
+}
+
+.forumTable td{
+    border-spacing:0 10px;
+    border-radius: 5px;
+}
+
+.groupTable {
+    border-radius: 20px;
+    border-spacing: 0 10px;
+    font-family: 'Adobe Gothic Std';
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+.groupTable th td{
+    border: 1px solid black;
+}
+
+.viewGroup {
+    background-color: #707070;
+    color: #214c96;
+    text-align: center;
+    vertical-align: middle;
+    border: 4px outset;
+}
+
+
+    .viewGroup:hover {
+        background-color: #969696;
+        color: #2c66c9;
+    }
+
+.groupTable tr:nth-child(odd) {
+    border-spacing: 0 10px;
+    border-radius: 5px;
+    background-color: #e0e0e0;
+}
+
+.groupTable tr:nth-child(even) {
+    border-spacing: 0 10px;
+    border-radius: 5px;
+    background-color: #bcbcbc;
+}
+
+.recolourAL {
+    color: #ffffff;
+    font-size: large;
+    font-family: 'Franklin Gothic';
+}

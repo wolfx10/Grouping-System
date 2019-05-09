@@ -1,0 +1,80 @@
+﻿@model GroupingSystem.Models.ForumPost
+
+@{
+    ViewBag.Title = "ViewComments";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="~/Content/Site.css">
+<h2 style="text-align: center">@ViewBag.threadTitle</h2>
+
+<table class="table table-bordered table-hover table-condensed forumTable">
+
+    @foreach (var item in ViewBag.OP)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink((string)item.createdBy, "viewProfile", "UserProfiles", new { id = item.createdBy }, null)<br />
+                @item.OP
+            </td>
+        </tr>
+    }
+
+
+    </tr>
+    @foreach (var item in ViewBag.Posts)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink((string)item.PostedBy, "viewProfile", "UserProfiles", new { id = item.PostedBy }, null)<br />
+                @item.Comment<br />
+                <br />
+                <div style="font-size:small">
+                    @item.Time
+                    </div>
+            </td>
+        </tr>
+    }
+</table>
+@ViewBag.Time
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="hidden" name="inThread" value="@ViewBag.inThread" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="hidden" name="inCategory" value="@ViewBag.Category" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="hidden" name="currTime" value="@ViewBag.Time" />
+            </div>
+        </div>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Comment, "New Post", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Add Post" class="btn btn-default" />
+            </div>
+        </div>
+
+
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Return to Discussions", "ViewThreads", "Threads", new { id = ViewBag.Category }, new { @class = "btn btn-primary btn-large" })
+</div>

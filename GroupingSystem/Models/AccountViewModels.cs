@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace GroupingSystem.Models
@@ -87,7 +88,7 @@ namespace GroupingSystem.Models
 
         [Required]
         [Display(Name = "Date of birth")]
-        public string DoB { get; set; }
+        public DateTime DoB { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]

@@ -23,6 +23,14 @@ namespace GroupingSystem.Models
         [Column("Tickets available")]
         public int Tickets_available { get; set; }
 
-        public string eventAndTickets { get { return "Event: " + " " + Name + " | Tickets Available: " + Tickets_available; } }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime Date { get; set; }
+
+        [DataType(DataType.Time)]
+        [DisplayFormat(DataFormatString = "{0:HH:mm}", ApplyFormatInEditMode = true)]
+        public DateTime Time { get; set; }
+
+        public string eventAndTicketsAndDate { get { return "Event: " + " " + Name +  " | Date:  " + Date.ToString("dd/MM/yyyy") + " " + Time.ToString("HH:mm") + " | Tickets Available: " + Tickets_available; } }
     }
 }

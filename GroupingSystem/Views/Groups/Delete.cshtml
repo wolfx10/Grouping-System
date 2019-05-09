@@ -69,11 +69,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.accepted)
+            @Html.DisplayNameFor(model => model.submitted)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.accepted)
+            @Html.DisplayFor(model => model.submitted)
         </dd>
 
         <dt>
@@ -94,12 +94,21 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
+    @if (Model.groupOwner == User.Identity.Name)
+    {
+        using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
 
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
-        </div>
+    <div class="form-actions no-color">
+        @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary btn-large" }) |
+        <input type="submit" value="Delete" class="btn btn-default" />
+
+    </div>
+        }
     }
+    else {
+        <span>This is not your group to delete.</span>
+    }
+
 </div>

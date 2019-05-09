@@ -16,6 +16,9 @@ namespace GroupingSystem.Models
 
         public string email { get; set; }
 
-        public string DoB { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime DoB { get; set; }
+
+        public string username { get; set; }
     }
 }

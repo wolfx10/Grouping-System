@@ -1,25 +1,23 @@
 ﻿@model GroupingSystem.Models.Group
-
+<link href="~/Content/Site.css" rel="stylesheet" />
 @{
     ViewBag.Title = "Join";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Join</h2>
+<h2>Viewing Group @Html.DisplayFor(model => model.groupName)</h2>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
 <div class="form-horizontal">
-    <h4>Group</h4>
-    @ViewBag.memberCount
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     @Html.HiddenFor(model => model.Id)
 
     <div class="form-group">
-        @Html.LabelFor(model => model.groupName, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.groupName, "Group Name", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.HiddenFor(model => model.groupName, new { htmlAttributes = new { @class = "form-control" } })
             @Html.DisplayFor(model => model.groupName, new { htmlAttributes = new { @class = "form-control" } })
@@ -28,7 +26,7 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.groupDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.groupDescription, "Description", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.HiddenFor(model => model.groupDescription, new { htmlAttributes = new { @class = "form-control" } })
             @Html.DisplayFor(model => model.groupDescription, new { htmlAttributes = new { @class = "form-control" } })
@@ -37,7 +35,7 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.groupEvent, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.groupEvent, "Event", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.HiddenFor(model => model.groupEvent, new { htmlAttributes = new { @class = "form-control" } })
             @Html.DisplayFor(model => model.groupEvent, new { htmlAttributes = new { @class = "form-control" } })
@@ -46,7 +44,7 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.groupOwner, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.groupOwner, "Created By", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.HiddenFor(model => model.groupOwner, new { htmlAttributes = new { @class = "form-control" } })
             @Html.DisplayFor(model => model.groupOwner, new { htmlAttributes = new { @class = "form-control" } })
@@ -60,7 +58,12 @@
             @Html.ValidationMessageFor(model => model.groupOwner, "", new { @class = "text-danger" })
         </div>
     </div>
-
+    <div class="form-group">
+        <div class="col-md-10">
+            @Html.HiddenFor(model => model.eventId, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.eventId, "", new { @class = "text-danger" })
+        </div>
+    </div>
 
 
     @if (Model.member1 == null)
@@ -69,9 +72,9 @@
             @if (Model.groupSize >= 2)
 
             {
-                @Html.LabelFor(model => model.member1, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.member1, "Group Member", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.member1, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.DisplayFor(model => model.member1, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.member1, "", new { @class = "text-danger" })
                 </div>
             }
@@ -81,7 +84,7 @@
     else
     {
         <div class="form-group">
-            @Html.LabelFor(model => model.member1, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.member1, "Group Member", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.HiddenFor(model => model.member1, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.DisplayFor(model => model.member1, new { htmlAttributes = new { @class = "form-control" } })
@@ -99,9 +102,9 @@
         <div class="form-group">
             @if (Model.groupSize >= 3)
             {
-                @Html.LabelFor(model => model.member2, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.member2, "Group Member", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.member2, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.DisplayFor(model => model.member2, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.member2, "", new { @class = "text-danger" })
                 </div>
             }
@@ -110,7 +113,7 @@
     else
     {
         <div class="form-group">
-            @Html.LabelFor(model => model.member2, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.member2, "Group Member", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.HiddenFor(model => model.member2, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.DisplayFor(model => model.member2, new { htmlAttributes = new { @class = "form-control" } })
@@ -124,9 +127,9 @@
         <div class="form-group">
             @if (Model.groupSize >= 4)
             {
-                @Html.LabelFor(model => model.member3, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.member3, "Group Member", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.member3, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.DisplayFor(model => model.member3, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.member3, "", new { @class = "text-danger" })
                 </div>
             }
@@ -135,7 +138,7 @@
     else
     {
         <div class="form-group">
-            @Html.LabelFor(model => model.member3, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.member3, "Group Member", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.HiddenFor(model => model.member3, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.DisplayFor(model => model.member3, new { htmlAttributes = new { @class = "form-control" } })
@@ -149,9 +152,9 @@
         <div class="form-group">
             @if (Model.groupSize >= 5)
             {
-                @Html.LabelFor(model => model.member4, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.member4, "Group Member", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.member4, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.DisplayFor(model => model.member4, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.member4, "", new { @class = "text-danger" })
                 </div>
             }
@@ -160,7 +163,7 @@
     else
     {
         <div class="form-group">
-            @Html.LabelFor(model => model.member4, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.member4, "Group Member", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.HiddenFor(model => model.member4, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.DisplayFor(model => model.member4, new { htmlAttributes = new { @class = "form-control" } })
@@ -174,18 +177,48 @@
     {
         <p>Group is full</p>
     }
-    else
+
+    @{bool valid = true;}
+    @if (Model.member1 == User.Identity.Name)
+    {
+        <p>You are already in this group.</p>
+        valid = false;
+        @Html.ActionLink("Leave Group", "Leave", new { id = Model.Id }, new { @class = "btn btn-primary btn-large" })
+    }
+    @if (Model.member2 == User.Identity.Name)
+    {
+        <p>You are already in this group.</p>
+        valid = false;
+        @Html.ActionLink("Leave Group", "Leave", new { id = Model.Id }, new { @class = "btn btn-primary btn-large" })
+    }
+    @if (Model.member3 == User.Identity.Name)
+    {
+        <p>You are already in this group.</p>
+        valid = false;
+        @Html.ActionLink("Leave Group", "Leave", new { id = Model.Id }, new { @class = "btn btn-primary btn-large" })
+    }
+    @if (Model.member4 == User.Identity.Name)
+    {
+        <p>You are already in this group.</p>
+        valid = false;
+        @Html.ActionLink("Leave Group", "Leave", new { id = Model.Id }, new { @class = "btn btn-primary btn-large" })
+    }
+    @if (Model.groupOwner == User.Identity.Name)
+    {
+        <p>You are the owner of this group.</p>
+        valid = false;
+    }
+    @if (valid == true)
     {
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Join Group" class="btn btn-default" />
             </div>
-        </div>
-    }
+        </div>  }
 
 </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to Groups", "Index",null , new { @class = "btn btn-primary btn-large" })
 </div>

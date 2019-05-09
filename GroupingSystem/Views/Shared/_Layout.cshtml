@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/modernizr")
     <link rel="stylesheet" type="text/css" href="~/Content/custom.css">
 
@@ -30,13 +31,29 @@
     </div>
 
 
-    <div class="sideMenu navbar-inverse navbar-left">
-        <ul class="nav">
-            <li>@Html.ActionLink("Home", "Index", "Home")</li>
-            <li>@Html.ActionLink("Events", "Index", "Events")</li>
-            <li>@Html.ActionLink("Groups", "Index", "Groups")</li>
+<div class="sideMenu navbar-inverse navbar-left">
+    <ul class="nav">
+        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+        <li>@Html.ActionLink("Events", "Index", "Events")</li>
+        <li>@Html.ActionLink("Groups", "Index", "Groups")</li>
+        <li>@Html.ActionLink("Forum", "Index", "ForumCategories")</li>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <li>@Html.ActionLink("Contact", "contactAdmin", "Messages")</li>
+        @if (User.IsInRole("Admin"))
+        {
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
             <li>@Html.ActionLink("Submitted Groups", "Index", "SubmittedGroups")</li>
-        </ul>
+            <li>@Html.ActionLink("Users", "Index", "UserProfiles")</li>
+        }
+    </ul>
     </div>
 
 

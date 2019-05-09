@@ -1,76 +1,93 @@
 ﻿@model IEnumerable<GroupingSystem.Models.Group>
-
+<link href="~/Content/Site.css" rel="stylesheet" />
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-submittedGroups = context.
+@using (Html.BeginForm("Index", "Groups", FormMethod.Get))
+{
+<span>Select an event: </span> @Html.DropDownList("evSearch", ViewBag.Events as SelectList," "); <span>  </span>
+<span>Show my groups  </span>@Html.CheckBox("myGroups", false);<span>  </span>
+    <input type="submit" value="Search for Groups" /> @Html.ActionLink("Reset search", "Index", "Groups", null, new { @class = "btn btn-primary btn-large" }) <div style=" margin-bottom: 5px;">
+    </div><br />
+}
+@ViewBag.searchResult     @Html.ActionLink("Create New Group", "Create", "Groups", null, new { @class = "btn btn-primary btn-large" })<br />
+<div>
+    <table class="table table-condensed groupTable">
 
-<li>@Html.ActionLink("Create New Group", "Create", "Groups")</li>
-<table class="table">
-
-    <tr>
-        <th>
-            Group Name
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.groupDescription)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.groupEvent)
-        </th>
-        <th>
-            Group Size
-        </th>
-        <th>
-            Group Owner
-        </th>
-        <th>
-            Group Members
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        if (item.submitted == false)
+        @foreach (var item in Model)
         {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.groupName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.groupDescription)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.groupEvent)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.groupSize)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.groupOwner)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.member1)<br />
-            @Html.ActionLink("view user", "ViewUser", "Account", new { id = "ca0ea853 - 1619 - 43e1 - 9b99 - 9f4b040d1acc" }, null)<br />
-            @Html.DisplayFor(modelItem => item.member2)<br />
-            @Html.DisplayFor(modelItem => item.member3)<br />
-            @Html.DisplayFor(modelItem => item.member4)
-        </td>
-
-        <td>
-            @Html.ActionLink("Join", "Join", new { id = item.Id })<br />
-            @Html.ActionLink("edit", "edit", new { id = item.Id })<br />
-            @if (item.groupOwner == User.Identity.Name)
+            int memberCount = 1;
+            if (item.submitted == false)
             {
-                @Html.ActionLink("Delete Group", "Delete", new { id = item.Id })<br />
-                @Html.ActionLink("Submit Group", "SubmitGroup", new { id = item.Id })
-            }
-        </td>
-    </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.groupName)<br />
+                        ---------------<br />
+                        Created by:@Html.ActionLink(item.groupOwner, "viewProfile", "UserProfiles", new { id = item.groupOwner }, null)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.groupEvent)<br />
+                        @foreach (var i in ViewBag.eventsList)
+                        {
+                            if (i.Id == item.eventId)
+                            {
+                                @i.Date.ToShortDateString() <span>   </span> @i.Time.ToShortTimeString();<br />
+
+                            }
+                        }
+
+                        Group Size: @Html.DisplayFor(modelItem => item.groupSize)
+                    </td>
+                    <td>
+                        Group Members:
+                        @if (item.member1 != null)
+                        {
+                            @Html.ActionLink(item.member1, "viewProfile", "UserProfiles", new { id = item.member1 }, null)
+                            memberCount = memberCount += 1;
+                        }
+
+                        @if (item.member2 != null)
+                        {
+                            <span> | </span>@Html.ActionLink(item.member2, "viewProfile", "UserProfiles", new { id = item.member2 }, null)<br />
+                            memberCount = memberCount += 1;
+                        }
+
+                        @if (item.member3 != null)
+                        {
+                            @Html.ActionLink(item.member3, "viewProfile", "UserProfiles", new { id = item.member3 }, null)<br />
+                            memberCount = memberCount += 1;
+                        }
+
+                        @if (item.member4 != null)
+                        {
+                            @Html.ActionLink(item.member4, "viewProfile", "UserProfiles", new { id = item.member4 }, null)<br />
+                            memberCount = memberCount += 1;
+                        }
+
+
+                    </td>
+
+                    <td class="viewGroup" onclick="location.href = '@(Url.Action("Join", "Groups", new { id = item.Id }))'">
+                        <br />
+                        @Html.ActionLink("View Group", "Join", new { id = item.Id }, new { @class = "recolourAL" })<br />
+                    </td>
+                    <td>
+                        @if (item.groupOwner == User.Identity.Name)
+                        {
+                            <div style="text-align: right">
+                                @Html.ActionLink("Delete Group", "Delete", new { id = item.Id })<br />
+                                @Html.ActionLink("Submit Group", "SubmitGroup", new { id = item.Id })
+                            </div>
+                        }
+
+                    </td>
+
+
+                </tr>
             }
         }
 
-</table>
+    </table>
+</div>

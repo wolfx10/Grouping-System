@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -16,8 +17,13 @@ namespace GroupingSystem.Models
         [Display(Name = "Last Name"), Required]
         public string LastName { get; set; }
 
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Date of birth"), Required]
-        public string DoB { get; set; }
+        public DateTime DoB { get; set; }
+        
+        [Display(Name = "IsAdmin")]
+        public bool IsAdmin { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
@@ -33,6 +39,7 @@ namespace GroupingSystem.Models
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
+
         }
         
         public static ApplicationDbContext Create()
@@ -47,5 +54,13 @@ namespace GroupingSystem.Models
         public System.Data.Entity.DbSet<GroupingSystem.Models.SubmittedGroup> SubmittedGroups { get; set; }
 
         public System.Data.Entity.DbSet<GroupingSystem.Models.UserProfile> UserProfiles { get; set; }
+
+        public System.Data.Entity.DbSet<GroupingSystem.Models.ForumCategory> ForumCategories { get; set; }
+
+        public System.Data.Entity.DbSet<GroupingSystem.Models.Thread> Threads { get; set; }
+
+        public System.Data.Entity.DbSet<GroupingSystem.Models.ForumPost> ForumPosts { get; set; }
+
+        public System.Data.Entity.DbSet<GroupingSystem.Models.Message> Messages { get; set; }
     }
 }

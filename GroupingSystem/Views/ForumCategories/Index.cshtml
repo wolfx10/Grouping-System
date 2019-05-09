@@ -1,0 +1,40 @@
+﻿@model IEnumerable<GroupingSystem.Models.ForumCategory>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="~/Content/Site.css">
+<body>
+    <h2 style="text-align: center">Forum</h2>
+
+
+    <table class="table table-bordered table-hover table-condensed forumTable">
+
+        @foreach (var item in Model)
+        {
+            <tr onclick="location.href = '@(Url.Action("ViewThreads", "Threads", new { id = item.Id }, null))'">
+                <td>
+                    @Html.ActionLink(item.Category, "ViewThreads", "Threads", new { id = item.Id }, null)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CategoryDescription)
+                </td>
+
+                @if (User.IsInRole("Admin"))
+                {
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    </td>
+                }
+
+            </tr>
+        }
+
+    </table>
+    <p>
+        @Html.ActionLink("Create New Category", "Create", null , new { @class = "btn btn-primary btn-large" })
+    </p>
+</body>  

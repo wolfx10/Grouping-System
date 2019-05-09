@@ -1,0 +1,47 @@
+﻿@model IEnumerable<GroupingSystem.Models.Thread>
+
+@{
+    ViewBag.Title = "ViewThreads";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="~/Content/Site.css">
+@foreach(var x in ViewBag.category)
+{
+    <h2 style="text-align: center">@x.Category Threads</h2>
+}
+
+
+
+<table class="table table-bordered table-hover table-condensed forumTable">
+
+    @foreach (var item in Model)
+    {
+    <tr onclick="location.href = '@(Url.Action("ViewComments", "ForumPosts", new { id = item.Id, category = item.category, title = item.threadTitle }, null))'">
+        <td>
+            @Html.ActionLink(item.threadTitle, "ViewComments", "ForumPosts", new { id = item.Id, category = item.category, title = item.threadTitle }, null)<br />
+            Created By: @Html.DisplayFor(modelItem => item.createdBy)<br />
+            <br />
+            <div style="font-size:small">
+                Last Post: @Html.DisplayFor(modelItem => item.LastUpdated)
+            </div>
+
+
+            @if (item.createdBy == User.Identity.Name)
+            {
+             <div style = "text-align: right">
+                   @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+             </div>
+            }
+
+            </td>
+        </tr>
+    }
+
+</table>
+<p>
+    @Html.ActionLink("Create New Discussion", "Create", null , new { category = ViewBag.categoryId }, new { @class = "btn btn-primary btn-large" })
+</p>
+<p>
+@Html.ActionLink("Return to Categories", "Index", "ForumCategories", null , new { @class = "btn btn-primary btn-large" })
+</p>
+

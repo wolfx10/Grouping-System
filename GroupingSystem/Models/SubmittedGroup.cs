@@ -19,5 +19,7 @@ namespace GroupingSystem.Models
         public string groupOwner { get; set; }
 
         public string groupEvent { get; set; }
+
+        public int eventId { get; set; }
     }
 }
