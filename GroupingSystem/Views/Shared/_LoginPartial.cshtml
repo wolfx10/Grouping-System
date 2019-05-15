@@ -7,15 +7,19 @@
         @Html.AntiForgeryToken()
 
         @*Populate top nav bar*@
-        <ul class="nav navbar-nav navbar-right">
-            <li>
-                @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "viewProfile", "UserProfiles", new {id=User.Identity.Name }, null)
-            </li>
-            <li>
-                @Html.ActionLink("Messages " +  @Html.Action("GetMessageStatus", "Layout"), "Index", "Messages", routeValues: null, htmlAttributes: new { title = "Manage" })
-            </li>
-            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
-        </ul>
+<ul class="nav navbar-nav navbar-right">
+
+    <li>
+        @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "viewProfile", "UserProfiles", new { id = User.Identity.Name }, null)
+    </li>
+    <li>
+        @Html.ActionLink("Manage account", "Index", "Manage", new { id = User.Identity.Name }, null)
+    </li>
+    <li>
+        @Html.ActionLink("Messages " + @Html.Action("GetMessageStatus", "Layout"), "Index", "Messages", routeValues: null, htmlAttributes: new { title = "Manage" })
+    </li>
+    <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+</ul>
     }
 }
 else
