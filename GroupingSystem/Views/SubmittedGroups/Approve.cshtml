@@ -13,6 +13,7 @@
     
 <div class="form-horizontal">
     <hr />
+    @*Output the group's information*@
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     @Html.HiddenFor(model => model.Id)
 

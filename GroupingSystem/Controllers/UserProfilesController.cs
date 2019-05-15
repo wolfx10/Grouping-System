@@ -40,6 +40,7 @@ namespace GroupingSystem.Controllers
             return View(userProfile);
         }
 
+        //view selected user's profile
         [Authorize]
         public async Task<ActionResult> viewProfile(string id)
         {
@@ -48,15 +49,18 @@ namespace GroupingSystem.Controllers
 
            UserProfile foundProfile = await db.UserProfiles.FindAsync(idFind);
            
+            //find approved groups where the user is mentioned
             var findGroups = (from g in db.Groups
                               where g.groupOwner == foundProfile.username || g.member1 == foundProfile.username || g.member2 == foundProfile.username || g.member3 == foundProfile.username || g.member4 == foundProfile.username
                               select g);
+
             var findApprovedGroups = (from a in db.SubmittedGroups
                                       where a.Approved == true
                                       select a);
 
             var listOfAttendedEvents = new List<Group>();
 
+            //populate list of recent events
             foreach (var a in findApprovedGroups)
             {
                 foreach(var g in findGroups)
@@ -69,11 +73,18 @@ namespace GroupingSystem.Controllers
 
             }
             
+            //Set to 5 most recent events
             ViewBag.eventsAttended = listOfAttendedEvents.Count;
-
+            ViewBag.privacyId = foundProfile.Id;
             var recentEvents = listOfAttendedEvents.Skip(Math.Max(0, listOfAttendedEvents.Count() - 5));
 
             ViewBag.groupsAttended = recentEvents;
+
+            //get privacy settings
+            ViewBag.Privacy = foundProfile.privateProfile;
+            ViewBag.DoBPrivacy = foundProfile.privateDoB;
+            ViewBag.BadgePrivacy = foundProfile.privateBadges;
+            ViewBag.EventPrivacy = foundProfile.privateEvents;
 
             return View(foundProfile);
 
@@ -137,6 +148,47 @@ namespace GroupingSystem.Controllers
             }
             return View(userProfile);
         }
+
+        [Authorize]
+        // open edit privacy view
+        public async Task<ActionResult> EditPrivacy(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            UserProfile userProfile = await db.UserProfiles.FindAsync(id);
+            if (userProfile == null)
+            {
+                return HttpNotFound();
+            }
+
+            if(userProfile.username == User.Identity.Name)
+            {
+                return View(userProfile);
+            }
+            else
+            {
+                return HttpNotFound();
+            }
+        }
+        [Authorize]
+        // Submit modified privacy settings
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditPrivacy([Bind(Include = "Id,firstName,lastName,email,DoB,username,privateProfile, privateDoB, privateBadges, privateEvents")] UserProfile userProfile)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(userProfile).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+                return RedirectToAction("ViewProfile/" + userProfile.username);
+            }
+            return View(userProfile);
+        }
+
 
         [Authorize(Roles = "Admin")]
         // GET: UserProfiles/Delete/5

@@ -23,6 +23,7 @@ namespace GroupingSystem.Controllers
             return View(await db.ForumPosts.ToListAsync());
         }
 
+        //View comments within a specified thread ID
         [Authorize]
         public async Task<ActionResult> ViewComments(int? id, int? category, string title)
         {
@@ -49,6 +50,7 @@ namespace GroupingSystem.Controllers
             return View();
         }
 
+        //Post a comment to the thread and reload the page
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]

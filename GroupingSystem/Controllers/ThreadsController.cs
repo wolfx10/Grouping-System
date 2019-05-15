@@ -22,7 +22,7 @@ namespace GroupingSystem.Controllers
             return View(await db.Threads.ToListAsync());
         }
 
-
+        //view threads under category selected
         [Authorize]
         public async Task<ActionResult> ViewThreads(int? id)
         {
@@ -46,7 +46,7 @@ namespace GroupingSystem.Controllers
             return View(await validThreads.ToListAsync());
         }
 
-
+        
         [Authorize(Roles = "Admin")]
         // GET: Threads/Details/5
         public async Task<ActionResult> Details(int? id)
@@ -64,23 +64,25 @@ namespace GroupingSystem.Controllers
         }
 
         [Authorize]
-        // GET: Threads/Create
+        // Create thread view
         public ActionResult Create()
         {
             return View();
         }
 
         [Authorize]
-        // POST: Threads/Create
+        // Submit new thread
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,threadTitle,createdBy,category, OP, LastUpdated")] Thread thread, int category)
+        public async Task<ActionResult> Create([Bind(Include = "Id,threadTitle,createdBy,category, OP, LastUpdated, Created")] Thread thread, int category)
         {
             thread.createdBy = User.Identity.Name;
             thread.category = category;
             thread.LastUpdated = DateTime.Now;
+            thread.Created = DateTime.Now;
+
             if (ModelState.IsValid)
             {
                 string page = "ViewThreads/" + thread.category;

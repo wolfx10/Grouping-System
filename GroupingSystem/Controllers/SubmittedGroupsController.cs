@@ -16,7 +16,7 @@ namespace GroupingSystem.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         [Authorize(Roles = "Admin")]
-        // GET: SubmittedGroups
+        // Show submitted groups and filter if necessary
         public async Task<ActionResult> Index(bool? filterOut)
         {
 
@@ -134,6 +134,7 @@ namespace GroupingSystem.Controllers
             return RedirectToAction("Index");
         }
 
+        //approve a group view
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Approve(int? id)
         {
@@ -147,12 +148,14 @@ namespace GroupingSystem.Controllers
                 return HttpNotFound();
             }
 
+            //find the group to approve
             int? groupIdFind = db.Groups.Where(x => x.Id == submittedGroup.GroupID).SingleOrDefault()?.Id;          
             Group foundGroup = await db.Groups.FindAsync(groupIdFind);
             ViewBag.chosenGroup = foundGroup;
             return View(submittedGroup);
         }
 
+        //approve the group
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -161,11 +164,12 @@ namespace GroupingSystem.Controllers
             if (ModelState.IsValid)
             {
 
-
+                //find the event the group is attending
                 int? eventIdFind = db.Events.Where(x => x.Id == groupSubmitted.eventId).SingleOrDefault()?.Id;
 
                 Event foundEvent = await db.Events.FindAsync(eventIdFind);
 
+                //find the group
                 int? groupIdFind = db.Groups.Where(x => x.Id == groupSubmitted.GroupID).SingleOrDefault()?.Id;
 
                 Group foundGroup = await db.Groups.FindAsync(groupIdFind);
@@ -175,7 +179,7 @@ namespace GroupingSystem.Controllers
                 int available = foundEvent.Tickets_available;
                 int deduction = 0;
 
-
+                //count tickets to decuct from event total and message the members of the group that the group has been approved
                 if(foundGroup.groupOwner != null)
                 {
                     var message = new Message
@@ -188,7 +192,7 @@ namespace GroupingSystem.Controllers
                         Time = DateTime.Now
                     };
                     db.Messages.Add(message);
-                    deduction = 1;
+                    deduction = deduction + 1;
                 }
                 if (foundGroup.member1 != null)
                 {
@@ -202,7 +206,7 @@ namespace GroupingSystem.Controllers
                         Time = DateTime.Now
                     };
                     db.Messages.Add(message);
-                    deduction = 2;
+                    deduction = deduction + 1;
                 }
                 if (foundGroup.member2 != null)
                 {
@@ -216,7 +220,7 @@ namespace GroupingSystem.Controllers
                         Time = DateTime.Now
                     };
                     db.Messages.Add(message);
-                    deduction = 3;
+                    deduction = deduction + 1;
                 }
                 if (foundGroup.member3 != null)
                 {
@@ -230,7 +234,7 @@ namespace GroupingSystem.Controllers
                         Time = DateTime.Now
                     };
                     db.Messages.Add(message);
-                    deduction = 4;
+                    deduction = deduction + 1;
                 }
                 if (foundGroup.member4 != null)
                 {
@@ -244,9 +248,10 @@ namespace GroupingSystem.Controllers
                         Time = DateTime.Now
                     };
                     db.Messages.Add(message);
-                    deduction = 5;
+                    deduction = deduction + 1;
                 }
 
+                //deduct tickets and modify group to approved
                 foundEvent.Tickets_available = available - deduction;
                 groupSubmitted.Approved = true;
                 db.Entry(groupSubmitted).State = EntityState.Modified;
@@ -254,15 +259,19 @@ namespace GroupingSystem.Controllers
                 await db.SaveChangesAsync();
                 int remainingCheck = foundEvent.Tickets_available;
 
+                //if the remaining tickets for the event is less than 5
                 if(remainingCheck <= 5)
                 {
+                    //get groups
                     var eventGroups = from g in db.Groups where g.eventId == foundEvent.Id select g.Id;
 
+                    //find groups for the event
                     foreach(var grp in eventGroups)
                     {
                         int? findGroupToCheck = db.Groups.Where(x => x.Id == groupSubmitted.GroupID).SingleOrDefault()?.Id;
 
                         Group groupFound = await db.Groups.FindAsync(findGroupToCheck);
+                        //check if group size is more than the available tickets and purge the group and message members that the group has been denied
                         if (groupFound.groupSize > remainingCheck)
                         {
                             var purgedGroup = new SubmittedGroup
@@ -355,6 +364,7 @@ namespace GroupingSystem.Controllers
             return View(groupSubmitted);
         }
 
+        //open denial page for group
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Deny(int? id)
         {
@@ -370,6 +380,7 @@ namespace GroupingSystem.Controllers
             return View(submittedGroup);
         }
 
+        //submit denial for group
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -377,6 +388,7 @@ namespace GroupingSystem.Controllers
         {
             if (ModelState.IsValid)
             {
+                //find event and group
                 int? eventIdFind = db.Events.Where(x => x.Id == groupSubmitted.eventId).SingleOrDefault()?.Id;
 
                 Event foundEvent = await db.Events.FindAsync(eventIdFind);
@@ -385,7 +397,7 @@ namespace GroupingSystem.Controllers
 
                 Group foundGroup = await db.Groups.FindAsync(groupIdFind);
 
-
+                //message users that group has been denied
                 if (foundGroup.groupOwner != null)
                 {
                     var message = new Message

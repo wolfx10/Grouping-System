@@ -20,5 +20,13 @@ namespace GroupingSystem.Models
         public DateTime DoB { get; set; }
 
         public string username { get; set; }
+
+        public bool privateProfile { get; set; }
+
+        public bool privateDoB { get; set; }
+
+        public bool privateBadges { get; set; }
+
+        public bool privateEvents { get; set; }
     }
 }

@@ -23,7 +23,6 @@ namespace GroupingSystem.Controllers
         {
         }
 
-        
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
         {
@@ -156,7 +155,8 @@ namespace GroupingSystem.Controllers
             {
                 var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, DoB = model.DoB };
                 var result = await UserManager.CreateAsync(user, model.Password);
-                var userProfile = new UserProfile { email = user.Email, firstName = user.FirstName, lastName = user.LastName, DoB = user.DoB, username = user.UserName };
+                //Create new "User Profile" entry
+                var userProfile = new UserProfile { email = user.Email, firstName = user.FirstName, lastName = user.LastName, DoB = user.DoB, username = user.UserName, privateProfile = false, privateBadges = false, privateDoB = false, privateEvents = false };
                 db.UserProfiles.Add(userProfile);
                 await db.SaveChangesAsync();
                 if (result.Succeeded)

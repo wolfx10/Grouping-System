@@ -5,6 +5,21 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@*Div for filtering options and post to controller*@
+<div style="text-align: center">
+    @using (Html.BeginForm("Index", "Events", FormMethod.Get))
+    {
+        <span>Select an event: </span> <input type="text" id="locSearch" , name="locSearch" value="" /> <span>  </span>
+        <input type="submit" value="Search for Location" /> @Html.ActionLink("Reset search", "Index", "Events", null, new { @class = "btn btn-primary btn-large" }) <div style=" margin-bottom: 5px;">
+        </div><br />
+    }
+    @if (ViewBag.searchedLocation != null)
+    {
+       @ViewBag.totalEvents <span> event found in </span> @ViewBag.searchedLocation
+    }
+
+</div>
+@*allow admins to see create event button*@
 @if (User.IsInRole("Admin"))
 {
     @Html.ActionLink("Create New Event", "Create", "Events", null, new { @class = "btn btn-primary btn-large" })

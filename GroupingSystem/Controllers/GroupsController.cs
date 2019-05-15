@@ -16,7 +16,7 @@ namespace GroupingSystem.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         [Authorize]
-        // GET: Groups
+        // Show groups based on the selected filtering options
         public async Task<ActionResult> Index(int? evSearch, bool? myGroups)
         {
             var eventList = from e in db.Events
@@ -35,36 +35,42 @@ namespace GroupingSystem.Controllers
 
             ViewBag.Events = new SelectList(filtEvents, "Id", "eventAndTicketsAndDate");
 
+            //if searching for a specific event
             if (evSearch != null)
             {
                 if(myGroups == true)
                 {
                     ViewBag.searchResult = "Currently searching for your groups for event" + evSearch;
+                    ViewBag.groupCount = (db.Groups.Where(x => x.eventId == evSearch).Where(x => new[] { x.groupOwner, x.member1, x.member2, x.member3, x.member4 }.Any(s => s.Contains(User.Identity.Name)))).Count();
                     return View(db.Groups.Where(x => x.eventId == evSearch).Where(x => new[] { x.groupOwner, x.member1, x.member2, x.member3, x.member4 }.Any(s => s.Contains(User.Identity.Name))));
                 }
                 else
                 {
                     ViewBag.searchResult = "Currently searching for groups for event" + evSearch;
+                    ViewBag.groupCount = (db.Groups.Where(x => x.eventId == evSearch)).Count();
                     return View(db.Groups.Where(x => x.eventId == evSearch));
                 }
             }
 
+            //if not searching for a specific event
             if (evSearch == null)
             {
                 if(myGroups == true)
                 {
                     ViewBag.searchResult = "Currently searching for your groups" + evSearch;
+                    ViewBag.groupCount = (db.Groups.Where(x => new[] { x.groupOwner, x.member1, x.member2, x.member3, x.member4 }.Any(s => s.Contains(User.Identity.Name)))).Count();
                     return View(db.Groups.Where(x => new[] { x.groupOwner, x.member1, x.member2, x.member3, x.member4 }.Any(s => s.Contains(User.Identity.Name))));
                 }
                 else
                 {
-                ViewBag.searchResult = "Currently showing all groups";
-                return View(await db.Groups.ToListAsync());
+                    ViewBag.searchResult = "Currently showing all groups";
+                    ViewBag.groupCount = (db.Groups.Where(x => x.Id >= 0)).Count();
+                    return View(await db.Groups.ToListAsync());
                 }
             }
 
             ViewBag.searchResult = "Currently showing all groups";
-
+            ViewBag.groupCount = (db.Groups.Where(x => x.Id >= 0)).Count();
 
 
             return View(await db.Groups.ToListAsync());
@@ -89,7 +95,7 @@ namespace GroupingSystem.Controllers
         }
 
         [Authorize]
-        // GET: Groups/Create
+        // Open create group view and create a list of currently available events to pass to drop down box
         public ActionResult Create()
         {
 
@@ -107,7 +113,7 @@ namespace GroupingSystem.Controllers
 
 
         [Authorize]
-        // GET: Groups/SubmitGroup
+        //open submit group view
         public async Task<ActionResult> SubmitGroup(int? id)
         {
             if (id == null)
@@ -122,80 +128,83 @@ namespace GroupingSystem.Controllers
             return View(group);
         }
 
+        //Submit the group to the submitted groups list for approval
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> SubmitGroup([Bind(Include = "Id,groupName,groupSize,groupOwner,member1,member2,member3,member4,submitted,groupDescription,groupEvent,eventId")]  Group subGroup)
         {
 
+            if (ModelState.IsValid)
+            {
+                //Sending messages to the inbox of users in the relevent fields to say that the group has been submitted
+                    if (subGroup.groupOwner != null)
+                {
+                    var message = new Message
+                    {
+                        User = subGroup.groupOwner,
+                        Message1 = "Hi " + subGroup.groupOwner + ", " + "Your group " + subGroup.groupName + " for event " + subGroup.groupEvent + " has been submitted for approval",
+                        Seen = false,
+                        Subject = "Group submitted",
+                        From = "Admin",
+                        Time = DateTime.Now
+                };
+                    db.Messages.Add(message);
+                }
+                if (subGroup.member1 != null)
+                {
+                    var message = new Message
+                    {
+                        User = subGroup.member1,
+                        Message1 = "Hi " + subGroup.groupOwner + ", " + "Your group " + subGroup.groupName + " for event " + subGroup.groupEvent + " has been submitted for approval",
+                        Seen = false,
+                        Subject = "Group submitted",
+                        From = "Admin",
+                        Time = DateTime.Now
+                    };
+                    db.Messages.Add(message);
+                }
+                if (subGroup.member2 != null)
+                {
+                    var message = new Message
+                    {
+                        User = subGroup.member2,
+                        Message1 = "Hi " + subGroup.groupOwner + ", " + "Your group " + subGroup.groupName + " for event " + subGroup.groupEvent + " has been submitted for approval",
+                        Seen = false,
+                        Subject = "Group submitted",
+                        From = "Admin",
+                        Time = DateTime.Now
+                    };
+                    db.Messages.Add(message);
+                }
+                if (subGroup.member3 != null)
+                {
+                    var message = new Message
+                    {
+                        User = subGroup.member3,
+                        Message1 = "Hi " + subGroup.groupOwner + ", " + "Your group " + subGroup.groupName + " for event " + subGroup.groupEvent + " has been submitted for approval",
+                        Seen = false,
+                        Subject = "Group submitted",
+                        From = "Admin",
+                        Time = DateTime.Now
+                    };
+                    db.Messages.Add(message);
+                }
+                if (subGroup.member4 != null)
+                {
+                    var message = new Message
+                    {
+                        User = subGroup.member4,
+                        Message1 = "Hi " + subGroup.groupOwner + ", " + "Your group " + subGroup.groupName + " for event " + subGroup.groupEvent + " has been submitted for approval",
+                        Seen = false,
+                        Subject = "Group submitted",
+                        From = "Admin",
+                        Time = DateTime.Now
+                    };
+                    db.Messages.Add(message);
+                }
 
-            if (subGroup.groupOwner != null)
-            {
-                var message = new Message
-                {
-                    User = subGroup.groupOwner,
-                    Message1 = "Hi " + subGroup.groupOwner + ", " + "Your group " + subGroup.groupName + " for event " + subGroup.groupEvent + " has been submitted for approval",
-                    Seen = false,
-                    Subject = "Group submitted",
-                    From = "Admin",
-                    Time = DateTime.Now
-            };
-                db.Messages.Add(message);
-            }
-            if (subGroup.member1 != null)
-            {
-                var message = new Message
-                {
-                    User = subGroup.member1,
-                    Message1 = "Hi " + subGroup.groupOwner + ", " + "Your group " + subGroup.groupName + " for event " + subGroup.groupEvent + " has been submitted for approval",
-                    Seen = false,
-                    Subject = "Group submitted",
-                    From = "Admin",
-                    Time = DateTime.Now
-                };
-                db.Messages.Add(message);
-            }
-            if (subGroup.member2 != null)
-            {
-                var message = new Message
-                {
-                    User = subGroup.member2,
-                    Message1 = "Hi " + subGroup.groupOwner + ", " + "Your group " + subGroup.groupName + " for event " + subGroup.groupEvent + " has been submitted for approval",
-                    Seen = false,
-                    Subject = "Group submitted",
-                    From = "Admin",
-                    Time = DateTime.Now
-                };
-                db.Messages.Add(message);
-            }
-            if (subGroup.member3 != null)
-            {
-                var message = new Message
-                {
-                    User = subGroup.member3,
-                    Message1 = "Hi " + subGroup.groupOwner + ", " + "Your group " + subGroup.groupName + " for event " + subGroup.groupEvent + " has been submitted for approval",
-                    Seen = false,
-                    Subject = "Group submitted",
-                    From = "Admin",
-                    Time = DateTime.Now
-                };
-                db.Messages.Add(message);
-            }
-            if (subGroup.member4 != null)
-            {
-                var message = new Message
-                {
-                    User = subGroup.member4,
-                    Message1 = "Hi " + subGroup.groupOwner + ", " + "Your group " + subGroup.groupName + " for event " + subGroup.groupEvent + " has been submitted for approval",
-                    Seen = false,
-                    Subject = "Group submitted",
-                    From = "Admin",
-                    Time = DateTime.Now
-                };
-                db.Messages.Add(message);
-            }
-
-
+                //create submitted group to enter to table
             var submitted = new SubmittedGroup
             {
                 GroupID = subGroup.Id,
@@ -204,8 +213,7 @@ namespace GroupingSystem.Controllers
                 eventId = subGroup.eventId
             };
 
-            if (ModelState.IsValid)
-            {
+
                 subGroup.submitted = true;
                 db.Entry(subGroup).State = EntityState.Modified;
                 db.SubmittedGroups.Add(submitted);
@@ -221,15 +229,17 @@ namespace GroupingSystem.Controllers
 
 
         [Authorize]
-        // POST: Groups/Create
+        // Submit the group creation
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "groupName,groupDescription,groupSize,groupOwner,groupEvent, eventId")] Group newGroup)
         {
+           
             Event eventChecked = new Event();
 
+            //reinitialise the drop down list of events to get value
             var events = from e in db.Events
                          where (e.Tickets_available > 0)
                          select e;
@@ -243,6 +253,7 @@ namespace GroupingSystem.Controllers
 
             if (ModelState.IsValid)
             {
+                //check event is valid
                 foreach (Event dbEvent in db.Events)
                 {
                     if (newGroup.groupEvent == dbEvent.Name)
@@ -253,6 +264,7 @@ namespace GroupingSystem.Controllers
 
                 }
 
+                //form input validation
                 if (newGroup.groupEvent == null)
                 {
                     ModelState.AddModelError("groupEvent", "Please pick an event.");
@@ -271,6 +283,7 @@ namespace GroupingSystem.Controllers
                     return View(newGroup);
                 }
 
+                //find the valid event and add it to the new group then add to database
                 var findEventID = (from x in db.Events
                                      where x.Name == newGroup.groupEvent
                                      select x.Id).SingleOrDefault();
@@ -292,7 +305,7 @@ namespace GroupingSystem.Controllers
         }
 
         [Authorize]
-        // GET: Groups/Join
+        // Join the group and count current members
         public async Task<ActionResult> Join(int? id)
         {
             if (id == null)
@@ -306,36 +319,41 @@ namespace GroupingSystem.Controllers
             }
             int memberCount = 0;
 
+            if (group.groupOwner != null)
+            {
+                memberCount = memberCount + 1;
+            } 
             if (group.member1 != null)
             {
-                memberCount = 2;
+                memberCount = memberCount + 1;
             }
 
             if (group.member2 != null)
             {
-                memberCount = 3;
+                memberCount = memberCount + 1;
             }
 
             if (group.member3 != null)
             {
-                memberCount = 4;
+                memberCount = memberCount + 1;
             }
 
             if (group.member4 != null)
             {
-                memberCount = 5;
+                memberCount = memberCount + 1;
             }
 
             ViewBag.memberCount = memberCount;
             return View(group);
         }
 
+        //Join group
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Join([Bind(Include = "Id,groupName,groupSize,groupOwner,member1,member2,member3,member4,submitted,groupDescription,groupEvent,eventId")] Group group)
         {
-
+            //Add member to next free slot and message group owner that they have joined
                 if (ModelState.IsValid){
 
                 if (group.member1 == null)
@@ -416,7 +434,7 @@ namespace GroupingSystem.Controllers
         }
 
         [Authorize]
-        // GET: Groups/Join
+        // Leave the group view and count current members
         public async Task<ActionResult> Leave(int? id)
         {
             if (id == null)
@@ -430,30 +448,36 @@ namespace GroupingSystem.Controllers
             }
             int memberCount = 0;
 
+            if (group.groupOwner != null)
+            {
+                memberCount = memberCount + 1;
+            }
+
             if (group.member1 != null)
             {
-                memberCount = 2;
+                memberCount = memberCount + 1;
             }
 
             if (group.member2 != null)
             {
-                memberCount = 3;
+                memberCount = memberCount + 1;
             }
 
             if (group.member3 != null)
             {
-                memberCount = 4;
+                memberCount = memberCount + 1;
             }
 
             if (group.member4 != null)
             {
-                memberCount = 5;
+                memberCount = memberCount + 1;
             }
 
             ViewBag.memberCount = memberCount;
             return View(group);
         }
 
+        //submit leave request
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -462,7 +486,7 @@ namespace GroupingSystem.Controllers
 
             if (ModelState.IsValid)
             {
-
+                //Remove member from allocated slot and message group owner that they have left
                 if (group.member1 == User.Identity.Name)
                 {
                     group.member1 = null;
@@ -608,10 +632,11 @@ namespace GroupingSystem.Controllers
 
 
         [Authorize]
-        // GET: Groups/Create
+        //Open view to create a group from the events lsit
         public async Task<ActionResult> CreateFromEvent(int id)
         {
 
+            //find the event which has been selected from the list
             int? idFind = db.Events.Where(x => x.Id == id).SingleOrDefault()?.Id;
 
             Event foundEvent = await db.Events.FindAsync(idFind);
@@ -624,6 +649,7 @@ namespace GroupingSystem.Controllers
                              where v.Date > DateTime.Now
                              select v;
 
+            //create option to only pick the event that has been selected
             ViewBag.PickedEvent = foundEvent;
             ViewBag.Events = new SelectList(filtEvents, "Name", "eventAndTicketsAndDate");
 
@@ -631,7 +657,7 @@ namespace GroupingSystem.Controllers
         }
 
 
-
+        //Submit group creation from specific event
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -639,6 +665,7 @@ namespace GroupingSystem.Controllers
         {
             Event eventChecked = new Event();
 
+            //regenerate the list of event(s)
             var events = from e in db.Events
                          where (e.Tickets_available > 0)
                          select e;
@@ -652,6 +679,7 @@ namespace GroupingSystem.Controllers
 
             if (ModelState.IsValid)
             {
+                //check that event is valid
                 foreach (Event dbEvent in db.Events)
                 {
                     if (newGroup.groupEvent == dbEvent.Name)
@@ -662,6 +690,7 @@ namespace GroupingSystem.Controllers
 
                 }
 
+                //input validation
                 if (newGroup.groupEvent == null)
                 {
                     ModelState.AddModelError("groupEvent", "Please pick an event.");
@@ -680,6 +709,7 @@ namespace GroupingSystem.Controllers
                     return View(newGroup);
                 }
 
+                //find event and create group
                 var findEventID = (from x in db.Events
                                    where x.Name == newGroup.groupEvent
                                    select x.Id).SingleOrDefault();

@@ -13,7 +13,7 @@
 
 
 <table class="table table-bordered table-hover table-condensed forumTable">
-
+    @*Output threads in the chosen category*@
     @foreach (var item in Model)
     {
     <tr onclick="location.href = '@(Url.Action("ViewComments", "ForumPosts", new { id = item.Id, category = item.category, title = item.threadTitle }, null))'">
@@ -25,7 +25,7 @@
                 Last Post: @Html.DisplayFor(modelItem => item.LastUpdated)
             </div>
 
-
+            @*Enable thread creator to delete the thread*@
             @if (item.createdBy == User.Identity.Name)
             {
              <div style = "text-align: right">

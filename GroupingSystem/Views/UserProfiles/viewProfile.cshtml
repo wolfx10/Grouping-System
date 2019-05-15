@@ -4,78 +4,120 @@
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h2>Details</h2>
-<div class="row">
-    <div class="col-md-4">
-        <section id="profileDetails">
-            <dl class="dl-horizontal">
-                <dt>
-                    Username:
-                </dt>
-                <dd>
-                    @Html.DisplayFor(model => model.username)
-                </dd>
-                <dt>
-                    Name:
-                </dt>
-                <dd>
-                    @Html.DisplayFor(model => model.firstName) @Html.DisplayFor(model => model.lastName)
-                </dd>
-                <dt>
-                    Date of Birth:
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.DoB)
-                </dd>
-                @if (Model.username != User.Identity.Name)
+@*Check if profile is private and output accordingly*@
+@if (ViewBag.Privacy == false || (User.Identity.Name == Model.username || User.IsInRole("Admin")))
+{
+    <h2>User Details</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <section id="profileDetails">
+                @*Check user viewing profile is the owner and display button to edit privacy settings*@
+                @if (Model.username == User.Identity.Name)
                 {
-                    <dd>
-                        @Html.ActionLink("Message user", "Create", "Messages", new { user = Model.username }, null)
-                    </dd>
+                    string privacyString = "EditPrivacy/" + Model.Id;
+                    @Html.ActionLink("Edit privacy settings", privacyString, "UserProfiles",null,new { @class = "btn btn-primary btn-large" })
                 }
+                @*output profile details*@
+                <dl class="dl-horizontal">
+                    <dt>
+                        Username:
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.username)
+                    </dd>
+                    <dt>
+                        Name:
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.firstName) @Html.DisplayFor(model => model.lastName)
+                    </dd>
+                    @*Check date of birth privacy and hide if enabled*@
+                    @if (ViewBag.DoBPrivacy == false || (User.Identity.Name == Model.username || User.IsInRole("Admin")))
+                    {
+                        <dt>
+                            Date of Birth:
+                        </dt>
 
-            </dl>
-        </section>
+                        <dd>
+                            @Html.DisplayFor(model => model.DoB)
+                        </dd>
+                    }
+
+                    @*Add button to message user if not account owner*@
+                    @if (Model.username != User.Identity.Name)
+                    {
+                        <dd>
+                            @Html.ActionLink("Message user", "Create", "Messages", new { user = Model.username }, null)
+                        </dd>
+                    }
+
+                </dl>
+            </section>
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-md-6">
-        Attended events
-        <section id="eventShowcase">
-            @foreach(var g in ViewBag.groupsAttended)
+    <div class="row">
+        <div class="col-md-6">
+            @*Check recent event privacy and output accordingly*@
+            @if (ViewBag.EventPrivacy == false || (User.Identity.Name == Model.username || User.IsInRole("Admin")))
             {
-                <div>
-                    @g.groupName
-                    @g.groupEvent                   
-                </div>
+                <h3>Recently Attended Events </h3>
+                <section id="eventShowcase">
+                    @foreach (var g in ViewBag.groupsAttended)
+                    {
+                        <div>
+                            @g.groupName
+                            @g.groupEvent
+                        </div>
+                    }
+                </section>
             }
-        </section>
+            else
+            {
+                <h3>
+                    This user's events are private.
+                </h3>
+            }
+        </div>
+        <div class="col-md-6">
+            @*Check badge privacy and output accordingly*@
+            @if (ViewBag.BadgePrivacy == false || (User.Identity.Name == Model.username || User.IsInRole("Admin")))
+            {
+                <section id="eventBadges">
+                    <h3> Badges </h3>
+                    <div>
+
+                        @if (ViewBag.eventsAttended >= 1)
+                        {
+                            <span>Events attended:</span>
+                            <img src="@Url.Content("~/Content/badges/1OrMore.jpg")" />
+
+                        }
+                        @if (ViewBag.eventsAttended >= 3)
+                        {
+
+                            <img src="@Url.Content("~/Content/badges/3OrMore.jpg")" />
+
+                        }
+                        @if (ViewBag.eventsAttended >= 5)
+                        {
+
+                            <img src="@Url.Content("~/Content/badges/5OrMore.jpg")" />
+
+                        }
+                    </div>
+                </section>
+            }
+            else
+            {
+                <h3>
+                    This user's badges are private.
+                </h3>
+            }
+
+        </div>
     </div>
-    <div class="col-md-6">
-        <section id="eventBadges">
-            badges
-            <div>
-            @if (ViewBag.eventsAttended >= 1)
-            {
-            
-                <img src="@Url.Content("~/Content/badges/1OrMore.jpg")" />
-            
-            }
-            @if (ViewBag.eventsAttended >= 3)
-            {
-            
-                <img src="@Url.Content("~/Content/badges/3OrMore.jpg")" />
-            
-            }
-            @if (ViewBag.eventsAttended >= 5)
-            {
-            
-                <img src="@Url.Content("~/Content/badges/5OrMore.jpg")" />
-            
-            }
-            </div>
-        </section>
-    </div>
-</div>
+}
+                    @if(ViewBag.Privacy == true && User.Identity.Name != Model.username)
+                    {
+                     <h2>Sorry, this profile is private.</h2>
+                    }

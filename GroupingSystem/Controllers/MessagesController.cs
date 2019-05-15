@@ -15,12 +15,13 @@ namespace GroupingSystem.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Messages
+        // show messages for the logged in user
         public async Task<ActionResult> Index()
         {
             var userMessages = from m in db.Messages
                                where m.User == User.Identity.Name
                                select m;
+            //change all messages to seen
             foreach(Message m in userMessages)
             {
                 m.Seen = true;
@@ -45,14 +46,14 @@ namespace GroupingSystem.Controllers
             return View(message);
         }
 
-        // GET: Messages/Create
+        // Open create message to user from their profile
         public ActionResult Create(string user)
         {
             ViewBag.toUser = user;
             return View();
         }
 
-        // POST: Messages/Create
+        // Submit message to chosen user
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -73,12 +74,13 @@ namespace GroupingSystem.Controllers
             return View(message);
         }
 
+        //Contact admin view
         public ActionResult contactAdmin()
         {
             return View();
         }
 
-        // POST: Messages/Create
+        // Send message to Admin
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]

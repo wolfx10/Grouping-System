@@ -23,6 +23,8 @@ textarea {
     max-width: 280px;
 }
 
+
+/*Formatting tables within views*/
 .forumTable {
     border-radius: 20px;
     border-spacing: 0 10px;

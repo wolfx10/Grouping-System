@@ -65,7 +65,7 @@
         </div>
     </div>
 
-
+    @*Displays for members if they are populated*@
     @if (Model.member1 == null)
     {
         <div class="form-group">
@@ -172,7 +172,7 @@
         </div>
     }
 
-
+    @*Ensuring members of the group can't join again and provide the option to leave*@
     @if (ViewBag.memberCount == Model.groupSize)
     {
         <p>Group is full</p>

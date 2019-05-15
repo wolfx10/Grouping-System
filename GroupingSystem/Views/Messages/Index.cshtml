@@ -5,8 +5,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
-
+<h2>Messages</h2>
+@*Output messages to view*@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
@@ -27,7 +27,6 @@
         </td>
 
         <td>
-            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
             @Html.ActionLink("Delete", "Delete", new { id = item.Id })
         </td>
     </tr>

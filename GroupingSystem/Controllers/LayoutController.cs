@@ -21,6 +21,7 @@ namespace GroupingSystem.Controllers
             return View();
         }
 
+        //create label for inbox in shared layout
         public ActionResult GetMessageStatus()
         {
             string messageRead = "(0)";
@@ -30,6 +31,7 @@ namespace GroupingSystem.Controllers
                                where m.User == User.Identity.Name
                                select m;
 
+            //count unread messages
             foreach (Message m in userMessages)
             {
                 if(m.Seen == false)

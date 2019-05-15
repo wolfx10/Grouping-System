@@ -9,12 +9,16 @@
 
 <table class="table table-bordered table-hover table-condensed forumTable">
 
+    @*output forum posts from controller*@
     @foreach (var item in ViewBag.OP)
     {
         <tr>
             <td>
                 @Html.ActionLink((string)item.createdBy, "viewProfile", "UserProfiles", new { id = item.createdBy }, null)<br />
                 @item.OP
+                <div style="font-size:small">
+                    @item.Created
+                </div>
             </td>
         </tr>
     }
@@ -35,7 +39,8 @@
         </tr>
     }
 </table>
-@ViewBag.Time
+
+@*Input form for new post to thread*@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()

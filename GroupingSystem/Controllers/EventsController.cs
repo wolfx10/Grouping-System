@@ -15,9 +15,9 @@ namespace GroupingSystem.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Events
+        // Get events to show based on if searching for a location or not
         [Authorize]
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string locSearch)
         {
             var events = from e in db.Events
                          where (e.Tickets_available > 0)
@@ -26,6 +26,17 @@ namespace GroupingSystem.Controllers
             var filtEvents = from v in events
                              where v.Date > DateTime.Now
                              select v;
+
+            if(locSearch != null)
+            {
+                var locationEvents = from e in filtEvents
+                                     where e.Location.ToUpper() == locSearch.ToUpper()
+                                     select e;
+                ViewBag.totalEvents = locationEvents.Count();
+                locSearch = locSearch.ToLower();
+                ViewBag.searchedLocation = char.ToUpper(locSearch[0]) + locSearch.Substring(1); ;
+                return View(await locationEvents.ToListAsync());
+            }
 
             return View(await filtEvents.ToListAsync());
         }

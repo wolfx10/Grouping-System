@@ -13,6 +13,7 @@
 
         @foreach (var item in Model)
         {
+            @*Enable clicking on table row to navigate*@
             <tr onclick="location.href = '@(Url.Action("ViewThreads", "Threads", new { id = item.Id }, null))'">
                 <td>
                     @Html.ActionLink(item.Category, "ViewThreads", "Threads", new { id = item.Id }, null)
@@ -21,6 +22,7 @@
                     @Html.DisplayFor(modelItem => item.CategoryDescription)
                 </td>
 
+                @*Enable admins to edit categories*@
                 @if (User.IsInRole("Admin"))
                 {
                     <td>

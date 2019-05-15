@@ -4,20 +4,27 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<h1 style="text-align: center">Group List</h1>
 
-@using (Html.BeginForm("Index", "Groups", FormMethod.Get))
-{
-<span>Select an event: </span> @Html.DropDownList("evSearch", ViewBag.Events as SelectList," "); <span>  </span>
-<span>Show my groups  </span>@Html.CheckBox("myGroups", false);<span>  </span>
-    <input type="submit" value="Search for Groups" /> @Html.ActionLink("Reset search", "Index", "Groups", null, new { @class = "btn btn-primary btn-large" }) <div style=" margin-bottom: 5px;">
-    </div><br />
-}
-@ViewBag.searchResult     @Html.ActionLink("Create New Group", "Create", "Groups", null, new { @class = "btn btn-primary btn-large" })<br />
+@*div for filtering to pass to controller*@
+<div style="text-align: center">
+    @using (Html.BeginForm("Index", "Groups", FormMethod.Get))
+    {
+        <span>Select an event: </span> @Html.DropDownList("evSearch", ViewBag.Events as SelectList, " "); <span>  </span>
+        <span>Show my groups  </span>@Html.CheckBox("myGroups", false);<span>  </span>
+        <input type="submit" value="Search for Groups" /> @Html.ActionLink("Reset search", "Index", "Groups", null, new { @class = "btn btn-primary btn-large" }) <div style=" margin-bottom: 5px;">
+        </div><br />
+    }
+
+    @*display current search term*@
+</div>
+@ViewBag.searchResult     @Html.ActionLink("Create New Group", "Create", "Groups", null, new { @class = "btn btn-primary btn-large" })   <div style="text-align: right"> @ViewBag.groupCount Groups in total displayed</div >
 <div>
     <table class="table table-condensed groupTable">
 
         @foreach (var item in Model)
         {
+            @*display groups within the groups table if not submitted*@
             int memberCount = 1;
             if (item.submitted == false)
             {
@@ -69,6 +76,7 @@
 
                     </td>
 
+                    @*Enable clicking into the group through clicking the row*@
                     <td class="viewGroup" onclick="location.href = '@(Url.Action("Join", "Groups", new { id = item.Id }))'">
                         <br />
                         @Html.ActionLink("View Group", "Join", new { id = item.Id }, new { @class = "recolourAL" })<br />

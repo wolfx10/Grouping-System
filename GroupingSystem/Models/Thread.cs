@@ -20,5 +20,7 @@ namespace GroupingSystem.Models
         public string OP { get; set; }
 
         public DateTime LastUpdated { get; set; }
+
+        public DateTime Created { get; set; }
     }
 }

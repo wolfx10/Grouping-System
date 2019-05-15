@@ -363,6 +363,7 @@
     <Content Include="Views\Events\Create.cshtml" />
     <Content Include="Views\Groups\CreateFromEvent.cshtml" />
     <Content Include="Views\Messages\contactAdmin.cshtml" />
+    <Content Include="Views\UserProfiles\EditPrivacy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

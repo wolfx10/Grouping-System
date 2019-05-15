@@ -6,6 +6,7 @@
 }
 
 <h2>Submitted groups</h2>
+@*Div for filtering to send to controller*@
 @using (Html.BeginForm("Index", "SubmittedGroups", FormMethod.Get))
 {
     <span>Filter out approved/denied groups: </span>@Html.CheckBox("filterOut", false);<span>  </span><br />
